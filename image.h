@@ -17,11 +17,13 @@ typedef struct image Image;
 //nova
 typedef struct pixelgray Pixelgray;
 typedef struct image ImageGray;
+
 /*
 Novas funcoes
 - ler txt e converter em imagem -> Image
-- exportar imagem para txt -> txt salvo
 - Converter imagem RGB para nivel de cinza, isto é, com um único valor de pixel -> ImageGray
+	a conversão de RGB para cinza será: PixelGray = (soma pixelRGB / 3) // parametro uma Image (RGB)
+- exportar imagem em cinza, isto é, com um unico valor para txt -> txt salvo
 - aplicar clusterizacao na imagem a partir de um arquivo txt com sementes, 
 	adtaptar a funcao da distancia euclidiana para considerar apenas os valores do pixel -> salvar txt com o resultado da clusterizacao
 */
