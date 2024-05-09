@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // Incluir a biblioteca string.h para strtok e strtol
+#include <string.h>
 
 // Função para calcular a média dos valores RGB de um pixel
 float calcular_media(char *pixel) {
@@ -14,11 +14,17 @@ int main() {
     char linha[1000];
 
     // Abrir o arquivo original para leitura
-    arquivo_orig = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\img\\input_image.txt", "r");
+    arquivo_orig = fopen("CAMINHOAQUI", "r");
     if (arquivo_orig == NULL) {
         perror("Erro ao abrir o arquivo original");
         return EXIT_FAILURE;
     }
+
+    // Ler a primeira linha e descartar
+    fgets(linha, sizeof(linha), arquivo_orig);
+
+    // Descartar a segunda linha
+    fgets(linha, sizeof(linha), arquivo_orig);
 
     // Abrir o novo arquivo para escrita
     arquivo_medias = fopen("medias_pixels.txt", "w");
@@ -28,7 +34,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    // Iterar pelas linhas do arquivo original, pulando as duas primeiras linhas
+    // Iterar pelas linhas do arquivo original
     while (fgets(linha, sizeof(linha), arquivo_orig) != NULL) {
         char *token;
         const char *delim = ","; // Corrigido para ser uma string literal
