@@ -14,7 +14,7 @@ int main() {
     char linha[1000];
 
     // Abrir o arquivo original para leitura
-    arquivo_orig = fopen("CAMINHOAQUI", "r");
+    arquivo_orig = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\output\\medias_pixels.txt", "r");
     if (arquivo_orig == NULL) {
         perror("Erro ao abrir o arquivo original");
         return EXIT_FAILURE;
