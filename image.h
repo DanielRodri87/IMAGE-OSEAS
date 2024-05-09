@@ -16,7 +16,7 @@ typedef struct image Image;
 
 //nova
 typedef struct pixelgray Pixelgray;
-typedef struct image ImageGray;
+typedef struct imagegray ImageGray;
 
 /*
 Novas funcoes

@@ -18,6 +18,20 @@ struct image
     PixelRgb *pixel;
 };
 
+struct pixelgray
+{
+    int valor_media;
+};
+
+
+struct imagegray
+{
+    int altura;
+    int largura;
+    Pixelgray *pixel;
+};
+
+
 Image *createImage(int altura, int largura)
 {
     Image *img = calloc(1, sizeof(Image));
