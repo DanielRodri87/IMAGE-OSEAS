@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 struct pixel
 {
     int red;
