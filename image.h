@@ -15,14 +15,34 @@
 
 #include<stdio.h>
 
-typedef struct pixel PixelRGB;
+typedef struct pixel
+{
+    int red;
+    int green;
+    int blue;
+} PixelRGB;
 
-typedef struct image Image;
 
-typedef struct pixelgray Pixelgray;
+typedef struct image
+{
+    int altura;
+    int largura;
+    PixelRGB *pixel;
+} Image;
 
 
-typedef struct imagegray ImageGray;
+typedef struct pixelgray
+{
+    int media_pixel;
+} Pixelgray;
+
+typedef struct imagegray
+{
+    int altura;
+    int largura;
+    Pixelgray *pixel;
+} ImageGray;
+
 
 //nova
 // typedef struct pixelgray ;

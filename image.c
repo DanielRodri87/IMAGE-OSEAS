@@ -3,33 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct pixel
-{
-    int red;
-    int green;
-    int blue;
-};
-
-struct image
-{
-    int altura;
-    int largura;
-    PixelRGB *pixel;
-};
-
-struct pixelgray
-{
-    int media_pixel;
-};
-
-
-struct imagegray
-{
-    int altura;
-    int largura;
-    Pixelgray *pixel;
-};
-
 
 void ler_imagem_arkv(FILE *arq, Image *img){
     int i = 0;
