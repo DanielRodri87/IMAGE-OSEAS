@@ -121,6 +121,8 @@ PixelRGB getPixel(int lin, int col, Image *img);
  */
 void setPixel(int lin, int col, Image *img);
 
+void salvar_imagem_arkv(ImageGray *img, FILE *gray_image);
+
 /**
  * @brief Função que imprime a imagem.
  *

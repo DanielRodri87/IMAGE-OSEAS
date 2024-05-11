@@ -5,33 +5,54 @@
 
 
 void ler_imagem_arkv(FILE *arq, Image *img){
-    int i = 0;
-	fscanf(arq,"%d", &(img->altura));
-	fscanf(arq,"%d", &(img->largura));
-
-    while (fscanf(arq, "%d %d %d", &(img->pixel[i].red), &(img->pixel[i].green), &(img->pixel[i].blue)) == 3)
-    {
-        i++;
+    fscanf(arq, "%d", &img->altura);
+    fscanf(arq, "%d", &img->largura);
+    img->pixel = (PixelRGB*)calloc(sizeof(PixelRGB), img->altura*img->largura);
+    for(int i=0;i<img->altura;i++){
+        for(int x = 0; x < img->largura; x++){
+            fscanf(arq,"%d %d %d,", &img->pixel[(i * img->largura) + x].red, &img->pixel[(i * img->largura) + x].green, &img->pixel[(i * img->largura) + x].blue);
+        }
     }
-    
+    fclose(arq);
 }
 
 //========================================================================================================================================================================
 
-void converter_imagem(Image *img, ImageGray *imgray){
-    int pixelGray;
+void alocarGray(int altura, int largura, Pixelgray **pixel)
+{
+    *pixel = (Pixelgray*)calloc(sizeof(Pixelgray), altura*largura);
+}
+
+void converter_imagem(Image *img, ImageGray *imgray)
+{
     imgray->altura = img->altura;
     imgray->largura = img->largura;
+    
+    alocarGray(imgray->altura, imgray->largura,&(imgray->pixel));
+    
+    for (int i = 0; i < img->altura; i++){
+        for (int j = 0; j < img->largura; j++) {
 
-    for (int i = 0; i < img->altura; i++)
-    {
-        for (int j = 0; j < img->largura; j++)
-        {
-            pixelGray = (img->pixel[(i * img->largura) + j].red + img->pixel[(i * img->largura) + j].green + img->pixel[(i * img->largura) + j].blue) / 3;
-            imgray->pixel[i * img->largura + j].media_pixel = pixelGray;
-        }        
+            int gray = (img->pixel[i * img->largura +j].red + img->pixel[i * img->largura +j].green + img->pixel[i * img->largura +j].blue) / 3;
+
+            imgray->pixel[i * img->largura +j].media_pixel = gray;
+        }
+     }
+}
+void salvar_imagem_arkv(ImageGray *img, FILE *gray_image)
+{
+    fprintf(gray_image, "%d\n", img->altura);
+    fprintf(gray_image, "%d\n", img->largura);
+
+    for(int i=0;i<img->altura;i++){
+        for(int x = 0; x < img->largura; x++){
+            fprintf(gray_image,"%d %d %d,", img->pixel[(i * img->largura) + x].media_pixel, img->pixel[(i * img->largura) + x].media_pixel, img->pixel[(i * img->largura) + x].media_pixel);
+        }
+        fprintf(gray_image,"\n");
     }
-
+    
+    
+    fclose(gray_image);
 }
 
 //========================================================================================================================================================================
@@ -47,6 +68,10 @@ Image *createImage(int altura, int largura)
 
 //========================================================================================================================================================================
 
+
+
+
+
 void printDimensoesImage(Image *img)
 {
     printf("As dimensoes da imagem sao = altura: %d e a largura: %d\n", img->altura, img->largura);
@@ -56,9 +81,8 @@ void printDimensoesImage(Image *img)
 
 void printPixel(int lin, int col, Image *img)
 {
-    printf("O pixel na image[%d][%d] tem os valores RGB(%d, %d, %d)\n", lin, col, img->pixel[(lin * img->largura) + col].red, img->pixel[(lin * img->largura) + col].green, img->pixel[(lin * img->largura) + col].blue);
+    printf("\033[38;2;%d;%d;%dm**\033[0m", img->pixel[lin*img->largura+col].red, img->pixel[lin*img->largura+col].green, img->pixel[lin*img->largura+col].blue);
 }
-
 //========================================================================================================================================================================
 
 PixelRGB getPixel(int lin, int col, Image *img)
@@ -93,3 +117,4 @@ void printImage(Image *img)
         printf("\n");
     }
 }
+
