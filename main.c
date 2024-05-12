@@ -9,24 +9,18 @@ int main()
     Image *img = createImage(0, 0);
     ler_imagem_arkv(arq, img);
     printf("Imagem Colorida:\n");
-    for (int i = 0; i < img->altura; i++)
-    {
-        for (int j = 0; j < img->largura; j++)
-        {
-            printPixel(i, j, img);
-        }
-        printf("\n");
-    }
+    
+    printImage(img);
 
     printDimensoesImage(img);
     ImageGray *imgray = calloc(1, sizeof(ImageGray));
     converter_imagem(img, imgray);
-    // printImage(imgray);
+    printGrayImage(imgray);
     FILE *arq2 = fopen("imagem2.txt", "w");
     salvar_imagem_arkv(imgray, arq2);
 
 
-    printf("Quer sair? (s/n)\n");
+    printf("Clica qualquer coisa para sair\n");
     char c;
     scanf("%c", &c);
     if (c == 's')

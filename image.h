@@ -129,5 +129,7 @@ void salvar_imagem_arkv(ImageGray *img, FILE *gray_image);
  * @param img
  */
 void printImage(Image *img);
+void printGrayImage(ImageGray *img);
+void printValoresImage(Image *img);
 
 #endif // IMAGE_H

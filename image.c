@@ -83,6 +83,29 @@ void printPixel(int lin, int col, Image *img)
 {
     printf("\033[38;2;%d;%d;%dm**\033[0m", img->pixel[lin*img->largura+col].red, img->pixel[lin*img->largura+col].green, img->pixel[lin*img->largura+col].blue);
 }
+
+void printImage(Image *img)
+{
+    for (int i = 0; i < img->altura; i++)
+    {
+        for (int j = 0; j < img->largura; j++)
+        {
+            printPixel(i, j, img);
+        }
+        printf("\n");
+    }
+}
+
+void printGrayImage(ImageGray *img) {
+    for (int i = 0; i < img->altura; i++) {
+        for (int j = 0; j < img->largura; j++) {
+            printf("\033[38;2;%d;%d;%dm**\033[0m", img->pixel[i * img->largura + j].media_pixel, img->pixel[i * img->largura + j].media_pixel, img->pixel[i * img->largura + j].media_pixel);
+        }
+        printf("\n");
+    }
+}
+
+
 //========================================================================================================================================================================
 
 PixelRGB getPixel(int lin, int col, Image *img)
@@ -106,7 +129,7 @@ void setPixel(int lin, int col, Image *img)
 
 //========================================================================================================================================================================
 
-void printImage(Image *img)
+void printValoresImage(Image *img)
 {
     for (int i = 0; i < img->altura; i++)
     {
@@ -117,4 +140,6 @@ void printImage(Image *img)
         printf("\n");
     }
 }
+
+//========================================================================================================================================================================
 
