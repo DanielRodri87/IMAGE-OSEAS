@@ -3,14 +3,16 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-void ler_imagem_arkv(FILE *arq, Image *img){
+void ler_imagem_arkv(FILE *arq, Image *img)
+{
     fscanf(arq, "%d", &img->altura);
     fscanf(arq, "%d", &img->largura);
-    img->pixel = (PixelRGB*)calloc(sizeof(PixelRGB), img->altura*img->largura);
-    for(int i=0;i<img->altura;i++){
-        for(int x = 0; x < img->largura; x++){
-            fscanf(arq,"%d %d %d,", &img->pixel[(i * img->largura) + x].red, &img->pixel[(i * img->largura) + x].green, &img->pixel[(i * img->largura) + x].blue);
+    img->pixel = (PixelRGB *)calloc(sizeof(PixelRGB), img->altura * img->largura);
+    for (int i = 0; i < img->altura; i++)
+    {
+        for (int x = 0; x < img->largura; x++)
+        {
+            fscanf(arq, "%d %d %d,", &img->pixel[(i * img->largura) + x].red, &img->pixel[(i * img->largura) + x].green, &img->pixel[(i * img->largura) + x].blue);
         }
     }
     fclose(arq);
@@ -20,38 +22,41 @@ void ler_imagem_arkv(FILE *arq, Image *img){
 
 void alocarGray(int altura, int largura, Pixelgray **pixel)
 {
-    *pixel = (Pixelgray*)calloc(sizeof(Pixelgray), altura*largura);
+    *pixel = (Pixelgray *)calloc(sizeof(Pixelgray), altura * largura);
 }
 
 void converter_imagem(Image *img, ImageGray *imgray)
 {
     imgray->altura = img->altura;
     imgray->largura = img->largura;
-    
-    alocarGray(imgray->altura, imgray->largura,&(imgray->pixel));
-    
-    for (int i = 0; i < img->altura; i++){
-        for (int j = 0; j < img->largura; j++) {
 
-            int gray = (img->pixel[i * img->largura +j].red + img->pixel[i * img->largura +j].green + img->pixel[i * img->largura +j].blue) / 3;
+    alocarGray(imgray->altura, imgray->largura, &(imgray->pixel));
 
-            imgray->pixel[i * img->largura +j].media_pixel = gray;
+    for (int i = 0; i < img->altura; i++)
+    {
+        for (int j = 0; j < img->largura; j++)
+        {
+
+            int gray = (img->pixel[i * img->largura + j].red + img->pixel[i * img->largura + j].green + img->pixel[i * img->largura + j].blue) / 3;
+
+            imgray->pixel[i * img->largura + j].media_pixel = gray;
         }
-     }
+    }
 }
 void salvar_imagem_arkv(ImageGray *img, FILE *gray_image)
 {
     fprintf(gray_image, "%d\n", img->altura);
     fprintf(gray_image, "%d\n", img->largura);
 
-    for(int i=0;i<img->altura;i++){
-        for(int x = 0; x < img->largura; x++){
-            fprintf(gray_image,"%d %d %d,", img->pixel[(i * img->largura) + x].media_pixel, img->pixel[(i * img->largura) + x].media_pixel, img->pixel[(i * img->largura) + x].media_pixel);
+    for (int i = 0; i < img->altura; i++)
+    {
+        for (int x = 0; x < img->largura; x++)
+        {
+            fprintf(gray_image, "%d %d %d,", img->pixel[(i * img->largura) + x].media_pixel, img->pixel[(i * img->largura) + x].media_pixel, img->pixel[(i * img->largura) + x].media_pixel);
         }
-        fprintf(gray_image,"\n");
+        fprintf(gray_image, "\n");
     }
-    
-    
+
     fclose(gray_image);
 }
 
@@ -76,7 +81,7 @@ void printDimensoesImage(Image *img)
 
 void printPixel(int lin, int col, Image *img)
 {
-    printf("\033[38;2;%d;%d;%dm**\033[0m", img->pixel[lin*img->largura+col].red, img->pixel[lin*img->largura+col].green, img->pixel[lin*img->largura+col].blue);
+    printf("\033[38;2;%d;%d;%dm**\033[0m", img->pixel[lin * img->largura + col].red, img->pixel[lin * img->largura + col].green, img->pixel[lin * img->largura + col].blue);
 }
 
 void printImage(Image *img)
@@ -91,15 +96,17 @@ void printImage(Image *img)
     }
 }
 
-void printGrayImage(ImageGray *img) {
-    for (int i = 0; i < img->altura; i++) {
-        for (int j = 0; j < img->largura; j++) {
+void printGrayImage(ImageGray *img)
+{
+    for (int i = 0; i < img->altura; i++)
+    {
+        for (int j = 0; j < img->largura; j++)
+        {
             printf("\033[38;2;%d;%d;%dm**\033[0m", img->pixel[i * img->largura + j].media_pixel, img->pixel[i * img->largura + j].media_pixel, img->pixel[i * img->largura + j].media_pixel);
         }
         printf("\n");
     }
 }
-
 
 //========================================================================================================================================================================
 
@@ -146,88 +153,48 @@ seed.txt
 218 91 30 4
 287 159 30 5
 */
-void seedimagemGray(ImageGray *img)
-{
-    ImageGray *seedimage = (ImageGray *)calloc(1, sizeof(ImageGray));
-    if (seedimage == NULL) {
-        fprintf(stderr, "Erro ao alocar memória para seedimage\n");
-        exit(EXIT_FAILURE);
-    }
+void seedimagemGray(ImageGray *img){
+    ImageGray imagecluster;
+    FILE *arq;
+    
+    imagecluster.pixel = (Pixelgray*)calloc(sizeof(Pixelgray), img->altura * img->largura);  
+    int x,y,z,num;
 
-    FILE *arq = fopen("seed.txt", "r");
-    if (arq == NULL) {
-        fprintf(stderr, "Erro ao abrir o arquivo seed.txt\n");
-        free(seedimage);
-        exit(EXIT_FAILURE);
-    }
+    imagecluster.altura = img->altura;
+    imagecluster.largura = img->largura;
 
-    fscanf(arq, "%d", &seedimage->altura);
-    fscanf(arq, "%d", &seedimage->largura);
+    arq = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\seed.txt","r");
 
-    seedimage->pixel = (Pixelgray *)calloc(seedimage->altura * seedimage->largura, sizeof(Pixelgray));
-    if (seedimage->pixel == NULL) {
-        fprintf(stderr, "Erro ao alocar memória para pixels de seedimage\n");
-        free(seedimage);
-        fclose(arq);
-        exit(EXIT_FAILURE);
-    }
+    while(fscanf(arq,"%d %d %d %d", &x,&y,&z,&num) != EOF){
+        for(int i=0;i < img->altura; i++)
+            for(int j=0;j < img->largura; j++){
 
-    fclose(arq);
+                int result = img->pixel[(i * img->largura) + j].media_pixel - img->pixel[(x * img->largura) + y].media_pixel;
+                if(result < 0)
+                    result *= -1;
 
-    arq = fopen("seedimage.txt", "w");
-    if (arq == NULL) {
-        fprintf(stderr, "Erro ao abrir o arquivo seedimage.txt\n");
-        free(seedimage->pixel);
-        free(seedimage);
-        exit(EXIT_FAILURE);
-    }
+                if(result <= z){
+                    imagecluster.pixel[(i * img->largura) + j].media_pixel = num;
+                }
 
-    int num1, num2, dif, id;
-    for (int i = 0; i < seedimage->altura; i++)
-    {
-        for (int j = 0; j < seedimage->largura; j++)
-        {
-            seedimage->pixel[(i * seedimage->largura) + j].media_pixel = 0;
-        }
-    }
-
-    arq = fopen("seed.txt", "r");
-    if (arq == NULL) {
-        fprintf(stderr, "Erro ao abrir o arquivo seed.txt\n");
-        free(seedimage->pixel);
-        free(seedimage);
-        fclose(arq);
-        exit(EXIT_FAILURE);
-    }
-
-    while (fscanf(arq, "%d %d %d %d", &num1, &num2, &dif, &id) != EOF)
-    {
-        for (int i = num1; i < num1 + dif; i++)
-        {
-            for (int j = num2; j < num2 + dif; j++)
-            {
-                int saida = img->pixel[(i * img->largura) + j].media_pixel - img->pixel[(num1 * img->largura) + num2].media_pixel;
-
-                if (saida < 0)
-                    saida *= -1;
-
-                if (saida <= dif)
-                    seedimage->pixel[(i * seedimage->largura) + j].media_pixel = id;
             }
-        }
     }
 
-    for (int i = 0; i < seedimage->altura; i++)
-    {
-        for (int j = 0; j < seedimage->largura; j++)
-        {
-            fprintf(arq, "%d ", seedimage->pixel[(i * seedimage->largura) + j].media_pixel);
-        }
-        fprintf(arq, "\n");
+    arq = fopen("./saida.txt", "w");
+    for(int i = 0;i < img->altura; i++){
+        for(int j = 0;j < img->largura;j++)
+            fprintf(arq,"%d%d", imagecluster.pixel[(i * img->largura) + j].media_pixel, imagecluster.pixel[(i * img->largura) + j].media_pixel);
+        fprintf(arq,"\n");
     }
 
-    fclose(arq);
+    free(imagecluster.pixel);
+}
 
-    free(seedimage->pixel);
-    free(seedimage);
+//========================================================================================================================================================================
+void printcluster(FILE *arq)
+{
+    char c;
+    while(fscanf(arq, "%c", &c) != EOF){
+        printf("%c", c);
+    }
 }

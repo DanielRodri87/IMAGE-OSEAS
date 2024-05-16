@@ -5,30 +5,41 @@
 
 int main()
 {
-    FILE *arq = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\img\\input_image.txt", "r");
-    Image *img = createImage(0, 0);
-    ler_imagem_arkv(arq, img);
-    printf("Imagem Colorida:\n");
-    
-    printImage(img);
+    FILE *arq;
+    arq = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\img\\input_image.txt","r");
 
-    printDimensoesImage(img);
-    ImageGray *imgray = calloc(1, sizeof(ImageGray));
-    converter_imagem(img, imgray);
-    printGrayImage(imgray);
-    FILE *arq2 = fopen("imagem2.txt", "w");
-    salvar_imagem_arkv(imgray, arq2);
-    
-    // FILE *arq3 = fopen("imagem3.txt", "r");
+    Image img;
+    ImageGray img_gray;
 
-    printf("Clica qualquer coisa para sair\n");
-    char c;
-    scanf("%c", &c);
-    if (c == 's')
-    {
-        return 0;
-    }
+    system("PAUSE");
+
+    ler_imagem_arkv(arq, &img);
+    printImage(&img);
+
+    converter_imagem(&img, &img_gray);
+    seedimagemGray(&img_gray);
+
+    FILE *gray_image;
+    gray_image = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\output\\imagem2.txt", "w");
+    salvar_imagem_arkv(&img_gray, gray_image);
+
+    gray_image = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\output\\imagem2.txt", "r");
+
+
+
+    ler_imagem_arkv(gray_image, &img);
+    printImage(&img);
+
+
     fclose(arq);
-    fclose(arq2);
+    fclose(gray_image);
+
+    FILE *cluster_image;
+    cluster_image = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\output\\saida.txt", "r");
+    printcluster(cluster_image);
+
+    free(img.pixel);
+    free(img_gray.pixel);
+
     return 0;
 }

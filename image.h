@@ -132,5 +132,6 @@ void printImage(Image *img);
 void printGrayImage(ImageGray *img);
 void printValoresImage(Image *img);
 void seedimagemGray(ImageGray *img);
+void printcluster(FILE *arq);
 
 #endif // IMAGE_H
