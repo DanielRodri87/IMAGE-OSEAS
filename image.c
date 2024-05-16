@@ -67,11 +67,6 @@ Image *createImage(int altura, int largura)
 }
 
 //========================================================================================================================================================================
-
-
-
-
-
 void printDimensoesImage(Image *img)
 {
     printf("As dimensoes da imagem sao = altura: %d e a largura: %d\n", img->altura, img->largura);
@@ -143,3 +138,96 @@ void printValoresImage(Image *img)
 
 //========================================================================================================================================================================
 
+/*
+seed.txt
+310 290 30 1
+121 65 20 2
+199 393 20 3
+218 91 30 4
+287 159 30 5
+*/
+void seedimagemGray(ImageGray *img)
+{
+    ImageGray *seedimage = (ImageGray *)calloc(1, sizeof(ImageGray));
+    if (seedimage == NULL) {
+        fprintf(stderr, "Erro ao alocar memória para seedimage\n");
+        exit(EXIT_FAILURE);
+    }
+
+    FILE *arq = fopen("seed.txt", "r");
+    if (arq == NULL) {
+        fprintf(stderr, "Erro ao abrir o arquivo seed.txt\n");
+        free(seedimage);
+        exit(EXIT_FAILURE);
+    }
+
+    fscanf(arq, "%d", &seedimage->altura);
+    fscanf(arq, "%d", &seedimage->largura);
+
+    seedimage->pixel = (Pixelgray *)calloc(seedimage->altura * seedimage->largura, sizeof(Pixelgray));
+    if (seedimage->pixel == NULL) {
+        fprintf(stderr, "Erro ao alocar memória para pixels de seedimage\n");
+        free(seedimage);
+        fclose(arq);
+        exit(EXIT_FAILURE);
+    }
+
+    fclose(arq);
+
+    arq = fopen("seedimage.txt", "w");
+    if (arq == NULL) {
+        fprintf(stderr, "Erro ao abrir o arquivo seedimage.txt\n");
+        free(seedimage->pixel);
+        free(seedimage);
+        exit(EXIT_FAILURE);
+    }
+
+    int num1, num2, dif, id;
+    for (int i = 0; i < seedimage->altura; i++)
+    {
+        for (int j = 0; j < seedimage->largura; j++)
+        {
+            seedimage->pixel[(i * seedimage->largura) + j].media_pixel = 0;
+        }
+    }
+
+    arq = fopen("seed.txt", "r");
+    if (arq == NULL) {
+        fprintf(stderr, "Erro ao abrir o arquivo seed.txt\n");
+        free(seedimage->pixel);
+        free(seedimage);
+        fclose(arq);
+        exit(EXIT_FAILURE);
+    }
+
+    while (fscanf(arq, "%d %d %d %d", &num1, &num2, &dif, &id) != EOF)
+    {
+        for (int i = num1; i < num1 + dif; i++)
+        {
+            for (int j = num2; j < num2 + dif; j++)
+            {
+                int saida = img->pixel[(i * img->largura) + j].media_pixel - img->pixel[(num1 * img->largura) + num2].media_pixel;
+
+                if (saida < 0)
+                    saida *= -1;
+
+                if (saida <= dif)
+                    seedimage->pixel[(i * seedimage->largura) + j].media_pixel = id;
+            }
+        }
+    }
+
+    for (int i = 0; i < seedimage->altura; i++)
+    {
+        for (int j = 0; j < seedimage->largura; j++)
+        {
+            fprintf(arq, "%d ", seedimage->pixel[(i * seedimage->largura) + j].media_pixel);
+        }
+        fprintf(arq, "\n");
+    }
+
+    fclose(arq);
+
+    free(seedimage->pixel);
+    free(seedimage);
+}

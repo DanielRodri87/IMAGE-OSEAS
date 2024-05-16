@@ -18,7 +18,8 @@ int main()
     printGrayImage(imgray);
     FILE *arq2 = fopen("imagem2.txt", "w");
     salvar_imagem_arkv(imgray, arq2);
-
+    
+    // FILE *arq3 = fopen("imagem3.txt", "r");
 
     printf("Clica qualquer coisa para sair\n");
     char c;
