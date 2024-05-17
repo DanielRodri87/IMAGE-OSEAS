@@ -3,6 +3,7 @@
 #include "image.h"
 
 // Implemntação realizada e testada em computadores Windows. Caso o senhor tenha dificuldade em compilar o código, verifique os caminhos.
+// O Readme.md contém informações sobre a execução do código para Windows.
 
 int main()
 {
