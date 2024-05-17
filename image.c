@@ -163,7 +163,7 @@ void seedimagemGray(ImageGray *img){
     imagecluster.altura = img->altura;
     imagecluster.largura = img->largura;
 
-    arq = fopen("C:\\Users\\danie\\OneDrive\\Documentos\\UFPI-2024.1\\PROJETOS\\IMAGE-OSEAS\\IMAGE-OSEAS\\seed.txt","r");
+    arq = fopen("./seed.txt","r");
 
     while(fscanf(arq,"%d %d %d %d", &x,&y,&z,&num) != EOF){
         for(int i=0;i < img->altura; i++)
